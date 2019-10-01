@@ -14,7 +14,10 @@
           <Header></Header>
         </a-layout-header> -->
         <a-layout-content class="basic-layout-content">
-          <router-view></router-view>
+          <!-- <router-view></router-view> -->
+          <keep-alive>
+            <router-view />
+          </keep-alive>
         </a-layout-content>
         <!-- <a-layout-footer style="text-align: center">
           <Footer></Footer>

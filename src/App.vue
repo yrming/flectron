@@ -12,6 +12,10 @@
 }
 .ant-menu-item {
   width: 100% !important;
+  left: 15px !important;
+  border-radius: 50%;
+  width: 40px !important;
+  height: 40px !important;
 }
 .ant-menu-inline-collapsed {
   width: 100% !important;
