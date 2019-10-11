@@ -1,6 +1,14 @@
 <template>
   <div>
-    <div class="header">私信</div>
+    <div class="header">
+      <div class="header-nav">
+        <div class="left-btn"></div>
+        <div>私信</div>
+        <div class="right-btn" @click="refreshClick">
+          <a-icon type="sync" />
+        </div>
+      </div>
+    </div>
     <!-- list -->
     <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
       <a-list-item slot="renderItem" slot-scope="item" key="item.dm.id">
@@ -139,6 +147,12 @@ export default {
     },
     deleteModalOkClick() {
       alert(123);
+    },
+    refreshClick() {
+      this.loading = true;
+      this.showLoadingMore = true;
+      this.loadingMore = false;
+      this.loadData();
     },
     goUserPage(userId) {
       alert(userId);

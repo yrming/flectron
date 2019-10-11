@@ -196,9 +196,7 @@ export default {
     };
   },
   watch: {
-    timelineType(newVal, oldVal) {
-      console.log(newVal);
-      console.log(oldVal);
+    timelineType() {
       this.loading = true;
       this.showLoadingMore = false;
       this.loadingMore = false;

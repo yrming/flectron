@@ -1,6 +1,14 @@
 <template>
   <div>
-    <div class="header">首页</div>
+    <div class="header">
+      <div class="header-nav">
+        <div class="left-btn"></div>
+        <div>首页</div>
+        <div class="right-btn" @click="refreshClick">
+          <a-icon type="sync" />
+        </div>
+      </div>
+    </div>
     <Timeline :timelineType="timelineType"></Timeline>
   </div>
 </template>
@@ -34,7 +42,6 @@ export default {
     };
   },
   mounted() {
-    // this.loadData();
     this.timelineType = 0;
   },
   methods: {
@@ -103,6 +110,12 @@ export default {
       } else if (textItem.type === "link") {
         window.open(textItem.text);
       }
+    },
+    refreshClick() {
+      this.timelineType = -1;
+      setTimeout(() => {
+        this.timelineType = 0;
+      }, 100);
     },
     goUserPage(userId) {
       alert(userId);

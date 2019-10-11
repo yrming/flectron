@@ -1,6 +1,14 @@
 <template>
   <div>
-    <div class="header">收藏</div>
+    <div class="header">
+      <div class="header-nav">
+        <div class="left-btn"></div>
+        <div>收藏</div>
+        <div class="right-btn" @click="refreshClick">
+          <a-icon type="sync" />
+        </div>
+      </div>
+    </div>
     <Timeline :timelineType="timelineType"></Timeline>
   </div>
 </template>
@@ -108,6 +116,12 @@ export default {
     },
     deleteModalOkClick() {
       alert(123);
+    },
+    refreshClick() {
+      this.timelineType = -1;
+      setTimeout(() => {
+        this.timelineType = 2;
+      }, 100);
     },
     goUserPage(userId) {
       alert(userId);

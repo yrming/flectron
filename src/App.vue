@@ -95,6 +95,16 @@
     text-align: center;
     color: #c0c0c0;
     font-weight: bold;
+    .header-nav {
+      padding: 0 7px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .left-btn,
+      .right-btn {
+        width: 32px;
+      }
+    }
   }
 }
 .ant-list-vertical .ant-list-item-action {
