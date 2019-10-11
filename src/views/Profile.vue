@@ -2,8 +2,14 @@
   <div>
     <div class="header-container">
       <div class="header-title">
-        <img :src="userAvatar" alt="" />
-        {{ $route.query.userName }}
+        <div v-if="$route.query.from" class="left-btn" @click="goBackClick">
+          <a-icon type="arrow-left" />
+        </div>
+        <div class="user-name">
+          <img :src="userAvatar" alt="" />
+          {{ $route.query.userName }}
+        </div>
+        <div class="right-btn"></div>
       </div>
       <div class="header-nav">
         <a-tabs
@@ -88,6 +94,9 @@ export default {
     callback(key) {
       this.currentTabKey = key;
       this.timelineType = Number(key);
+    },
+    goBackClick() {
+      this.$router.replace({ path: this.$route.query.from });
     }
   },
   watch: {
@@ -116,23 +125,36 @@ export default {
   padding: 0;
   height: 72px;
   .header-title {
+    padding: 0 16px;
     height: 35px;
     color: #c0c0c0;
     font-weight: bold;
     // border-bottom: 1px solid #171717;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    img {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      margin-right: 10px;
+    .left-btn,
+    .right-btn {
+      width: 32px;
+      height: 35px;
+      line-height: 35px;
+    }
+    .user-name {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
     }
   }
   .header-nav {
     text-align: center;
     background-color: #212121;
+    padding: 0 6px;
   }
   .header-nav /deep/ .ant-tabs-nav-container {
     border-bottom: 1px solid #171717 !important;

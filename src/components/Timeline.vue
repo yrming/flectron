@@ -483,7 +483,11 @@ export default {
         // alert(textItem.text);
         this.$router.push({
           path: "/profile",
-          query: { userId: textItem.id, userName: textItem.name }
+          query: {
+            from: this.$route.fullPath,
+            userId: textItem.id,
+            userName: textItem.name
+          }
         });
       } else if (textItem.type === "link") {
         window.open(textItem.text);
