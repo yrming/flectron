@@ -1,10 +1,25 @@
 <template>
   <div>
-    <div class="header">@提到我的</div>
+    <div class="header">收藏</div>
     <!-- list -->
-    <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
+    <!-- <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
       <a-list-item slot="renderItem" slot-scope="item" key="item.title">
-        <template v-if="item.is_self" slot="actions">
+        <template
+          v-if="item.plain_text === '此消息已删除或不公开'"
+          slot="actions"
+        >
+          <span @click="handleStarClick(item)">
+            <a-icon
+              v-if="item.favorited"
+              type="star"
+              style="margin-right: 8px"
+              theme="twoTone"
+              twoToneColor="#fedd39"
+            />
+            <a-icon v-else type="star" style="margin-right: 8px" />
+          </span>
+        </template>
+        <template v-else-if="item.is_self" slot="actions">
           <span @click="handleStarClick(item)">
             <a-icon
               v-if="item.favorited"
@@ -45,7 +60,9 @@
             <div class="screen-name" @click="goUserPage(item.user.id)">
               {{ item.user.screen_name }}
             </div>
-            <div class="time">{{ item.created_at | dateFormat }}</div>
+            <div v-if="item.plain_text !== '此消息已删除或不公开'" class="time">
+              {{ item.created_at | dateFormat }}
+            </div>
           </div>
           <a-avatar
             slot="avatar"
@@ -92,7 +109,6 @@
       </a-list-item>
     </a-list>
     <div>
-      <!-- reply modal -->
       <a-modal
         :title="replyModalTitle"
         v-model="replyModalVisible"
@@ -113,7 +129,6 @@
           auto-focus
         />
       </a-modal>
-      <!-- retweet modal -->
       <a-modal
         v-model="retweetModalVisible"
         :closable="false"
@@ -133,7 +148,6 @@
           ref="textArea"
         />
       </a-modal>
-      <!-- delete modal -->
       <a-modal
         :title="deleteModalTitle"
         v-model="deleteModalVisible"
@@ -143,42 +157,63 @@
         cancelText="取消"
         @ok="deleteModalOkClick"
       >
+        <a-textarea
+          :defaultValue="deleteModalText"
+          :rows="4"
+          :disabled="true"
+        />
       </a-modal>
-    </div>
+    </div> -->
+    <Timeline :timelineType="timelineType"></Timeline>
   </div>
 </template>
 
 <script>
-import { getMentions } from "../../utils/fanfouService";
+import { getFavorites } from "@/utils/fanfouService";
+import Timeline from "@/components/Timeline";
 export default {
   data() {
     return {
+      timelineType: -1,
       loading: true,
       showLoadingMore: true,
       loadingMore: false,
       listData: [],
-      actions: [
-        { type: "rollback", text: "" },
-        { type: "star", text: "" },
-        { type: "retweet", text: "" }
-      ],
+      modalOption: {
+        type: -1,
+        title: "",
+        text: "",
+        visible: false
+      },
+      replyOption: {},
+      retweetOption: {},
+      deleteOption: {},
+      // 回复
+      replyStatusId: "",
       replyModalTitle: "",
       replyModalText: "",
       replyModalVisible: false,
+      // 转发
+      retweetStatusId: "",
       retweetModalTitle: "",
       retweetModalText: "",
       retweetModalVisible: false,
+      // 删除
+      deleteStatusId: "",
       deleteModalTitle: "",
-      deleteModalVisible: false
+      deleteModalText: "",
+      deleteModalVisible: false,
+      // 分页
+      page: 1
     };
   },
   mounted() {
-    this.loadingMore = false;
-    this.loadData();
+    this.timelineType = 2;
+    // this.loadData();
   },
   methods: {
     async loadData() {
-      const listData = await getMentions();
+      const listData = await getFavorites();
       if (listData === null) {
         this.$message.error("获取数据失败");
       } else {
@@ -191,9 +226,10 @@ export default {
         return;
       }
       this.loadingMore = true;
-      const maxId = this.listData[this.listData.length - 1].id;
-      const listData = await getMentions({ max_id: maxId });
+      this.page += 1;
+      const listData = await getFavorites({ page: this.page });
       if (listData === null) {
+        this.page -= 1;
         this.$message.error("获取数据失败");
       } else {
         if (listData.length === 0) {
@@ -226,6 +262,8 @@ export default {
       console.log(item);
     },
     handleDeleteClick(item) {
+      this.deleteModalTitle = `你确定要删除这条消息吗？`;
+      this.deleteModalText = item.plain_text;
       this.deleteModalVisible = true;
       console.log(item);
     },
@@ -238,26 +276,11 @@ export default {
     goUserPage(userId) {
       alert(userId);
     }
+  },
+  components: {
+    Timeline
   }
 };
 </script>
 
-<style lang="less" scoped>
-.timeline-photo {
-  margin-top: 10px;
-  // width: 300px;
-  width: 100%;
-  border-radius: 5px;
-}
-.load-more-button {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-.load-more-icon {
-  font-size: 16px;
-  color: #f7f7f7;
-  opacity: 0.65;
-  transform: rotate(90deg);
-}
-</style>
+<style lang="less" scoped></style>

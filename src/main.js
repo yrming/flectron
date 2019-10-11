@@ -14,7 +14,8 @@ import {
   Skeleton,
   Spin,
   Modal,
-  Popconfirm
+  Popconfirm,
+  Tabs
 } from "ant-design-vue";
 import App from "./App.vue";
 import router from "./router";
@@ -36,6 +37,7 @@ Vue.use(Skeleton);
 Vue.use(Spin);
 Vue.use(Modal);
 Vue.use(Popconfirm);
+Vue.use(Tabs);
 Vue.prototype.$message = Message;
 
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));

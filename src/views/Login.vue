@@ -3,7 +3,7 @@
     <a-layout class="login-layout">
       <a-layout-content style="padding: 64px">
         <div class="login-top">
-          <img src="../../assets/logo.png" alt="" />
+          <img src="@/assets/logo.png" alt="" />
           FLECTRON
         </div>
         <a-form :form="form" class="login-form" @submit="handleSubmit">
@@ -75,7 +75,7 @@
   </div>
 </template>
 <script>
-import { xauth } from "../../utils/fanfouService";
+import { xauth } from "@/utils/fanfouService";
 export default {
   data() {
     return {
@@ -98,7 +98,7 @@ export default {
               this.loading = false;
             } else {
               localStorage.setItem("account", JSON.stringify(userInfo));
-              this.$router.push({ path: "/home" });
+              this.$router.replace({ path: "/home" });
             }
           })();
         }

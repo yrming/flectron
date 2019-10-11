@@ -12,8 +12,7 @@ const router = new Router({
       path: "/",
       name: "login",
       hideInMenu: true,
-      component: () =>
-        import(/* webpackChunkName: "user" */ "./views/user/Login")
+      component: () => import(/* webpackChunkName: "user" */ "./views/Login")
     },
     {
       path: "/basic",
@@ -28,61 +27,73 @@ const router = new Router({
           path: "/home",
           name: "home",
           meta: {
+            needsKeepAlive: true,
             icon: "clock-circle",
             title: "首页"
           },
-          component: () =>
-            import(/* webpackChunkName: "user" */ "./views/user/Home")
+          component: () => import(/* webpackChunkName: "user" */ "./views/Home")
         },
         {
           path: "/mentions",
           name: "mentions",
           meta: {
+            needsKeepAlive: true,
             icon: "bell",
             title: "@提到我的"
           },
           component: () =>
-            import(/* webpackChunkName: "user" */ "./views/user/Mentions")
+            import(/* webpackChunkName: "user" */ "./views/Mentions")
         },
         {
-          path: "/privatemsg",
-          name: "privatemsg",
+          path: "/conversationlist",
+          name: "conversationlist",
           meta: {
+            needsKeepAlive: true,
             icon: "mail",
             title: "私信"
           },
           component: () =>
-            import(/* webpackChunkName: "user" */ "./views/user/PrivateMsg")
+            import(/* webpackChunkName: "user" */ "./views/ConversationList")
         },
         {
           path: "/favorites",
           name: "favorites",
           meta: {
+            needsKeepAlive: true,
             icon: "star",
             title: "收藏"
           },
           component: () =>
-            import(/* webpackChunkName: "user" */ "./views/user/Favorites")
+            import(/* webpackChunkName: "user" */ "./views/Favorites")
         },
         {
           path: "/album",
           name: "album",
           meta: {
+            needsKeepAlive: true,
             icon: "picture",
             title: "照片"
           },
           component: () =>
-            import(/* webpackChunkName: "user" */ "./views/user/Album")
+            import(/* webpackChunkName: "user" */ "./views/Album")
         },
         {
           path: "/send",
           name: "send",
           meta: {
+            needsKeepAlive: true,
             icon: "form",
             title: "你在做什么？"
           },
           component: () =>
-            import(/* webpackChunkName: "user" */ "./views/user/Album")
+            import(/* webpackChunkName: "user" */ "./views/Album")
+        },
+        {
+          path: "/profile",
+          name: "profile",
+          hideInMenu: true,
+          component: () =>
+            import(/* webpackChunkName: "user" */ "./views/Profile")
         }
       ]
     },

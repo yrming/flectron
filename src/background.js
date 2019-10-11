@@ -50,8 +50,16 @@ function createWindow() {
     win.loadURL("app://./index.html");
   }
 
-  win.on("closed", () => {
-    win = null;
+  // win.on("closed", () => {
+  //   win = null;
+  // });
+  win.on("close", event => {
+    if (app.quitting) {
+      win = null;
+    } else {
+      event.preventDefault();
+      win.hide();
+    }
   });
 }
 
@@ -67,10 +75,13 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    createWindow();
-  }
+  // if (win === null) {
+  //   createWindow();
+  // }
+  win.show();
 });
+
+app.on("before-quit", () => (app.quitting = true));
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

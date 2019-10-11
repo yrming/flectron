@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { getConversationList } from "../../utils/fanfouService";
+import { getConversationList } from "@/utils/fanfouService";
 export default {
   data() {
     return {
@@ -165,22 +165,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.timeline-photo {
-  margin-top: 10px;
-  // width: 300px;
-  width: 100%;
-  border-radius: 5px;
-}
-.load-more-button {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-.load-more-icon {
-  font-size: 16px;
-  color: #f7f7f7;
-  opacity: 0.65;
-  transform: rotate(90deg);
-}
-</style>
+<style lang="less" scoped></style>

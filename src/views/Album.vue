@@ -1,9 +1,14 @@
 <template>
   <div>
-    <div class="header">收藏</div>
+    <div class="header">照片</div>
     <!-- list -->
-    <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
-      <a-list-item slot="renderItem" slot-scope="item" key="item.title">
+    <!-- <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
+      <a-list-item
+        v-if="item.photo"
+        slot="renderItem"
+        slot-scope="item"
+        key="item.title"
+      >
         <template
           v-if="item.plain_text === '此消息已删除或不公开'"
           slot="actions"
@@ -60,9 +65,7 @@
             <div class="screen-name" @click="goUserPage(item.user.id)">
               {{ item.user.screen_name }}
             </div>
-            <div v-if="item.plain_text !== '此消息已删除或不公开'" class="time">
-              {{ item.created_at | dateFormat }}
-            </div>
+            <div class="time">{{ item.created_at | dateFormat }}</div>
           </div>
           <a-avatar
             slot="avatar"
@@ -109,7 +112,6 @@
       </a-list-item>
     </a-list>
     <div>
-      <!-- reply modal -->
       <a-modal
         :title="replyModalTitle"
         v-model="replyModalVisible"
@@ -130,7 +132,6 @@
           auto-focus
         />
       </a-modal>
-      <!-- retweet modal -->
       <a-modal
         v-model="retweetModalVisible"
         :closable="false"
@@ -150,7 +151,6 @@
           ref="textArea"
         />
       </a-modal>
-      <!-- delete modal -->
       <a-modal
         :title="deleteModalTitle"
         v-model="deleteModalVisible"
@@ -166,15 +166,18 @@
           :disabled="true"
         />
       </a-modal>
-    </div>
+    </div> -->
+    <Timeline :timelineType="timelineType"></Timeline>
   </div>
 </template>
 
 <script>
-import { getFavorites } from "../../utils/fanfouService";
+import { getPhotos } from "@/utils/fanfouService";
+import Timeline from "@/components/Timeline";
 export default {
   data() {
     return {
+      timelineType: -1,
       loading: true,
       showLoadingMore: true,
       loadingMore: false,
@@ -185,9 +188,6 @@ export default {
         text: "",
         visible: false
       },
-      replyOption: {},
-      retweetOption: {},
-      deleteOption: {},
       // 回复
       replyStatusId: "",
       replyModalTitle: "",
@@ -208,12 +208,12 @@ export default {
     };
   },
   mounted() {
-    this.loadingMore = false;
-    this.loadData();
+    this.timelineType = 4;
+    // this.loadData();
   },
   methods: {
     async loadData() {
-      const listData = await getFavorites();
+      const listData = await getPhotos();
       if (listData === null) {
         this.$message.error("获取数据失败");
       } else {
@@ -227,7 +227,7 @@ export default {
       }
       this.loadingMore = true;
       this.page += 1;
-      const listData = await getFavorites({ page: this.page });
+      const listData = await getPhotos({ page: this.page });
       if (listData === null) {
         this.page -= 1;
         this.$message.error("获取数据失败");
@@ -276,26 +276,11 @@ export default {
     goUserPage(userId) {
       alert(userId);
     }
+  },
+  components: {
+    Timeline
   }
 };
 </script>
 
-<style lang="less" scoped>
-.timeline-photo {
-  margin-top: 10px;
-  // width: 300px;
-  width: 100%;
-  border-radius: 5px;
-}
-.load-more-button {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-.load-more-icon {
-  font-size: 16px;
-  color: #f7f7f7;
-  opacity: 0.65;
-  transform: rotate(90deg);
-}
-</style>
+<style lang="less" scoped></style>

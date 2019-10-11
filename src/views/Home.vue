@@ -1,30 +1,10 @@
 <template>
   <div>
-    <div class="header">照片</div>
+    <div class="header">首页</div>
     <!-- list -->
-    <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
-      <a-list-item
-        v-if="item.photo"
-        slot="renderItem"
-        slot-scope="item"
-        key="item.title"
-      >
-        <template
-          v-if="item.plain_text === '此消息已删除或不公开'"
-          slot="actions"
-        >
-          <span @click="handleStarClick(item)">
-            <a-icon
-              v-if="item.favorited"
-              type="star"
-              style="margin-right: 8px"
-              theme="twoTone"
-              twoToneColor="#fedd39"
-            />
-            <a-icon v-else type="star" style="margin-right: 8px" />
-          </span>
-        </template>
-        <template v-else-if="item.is_self" slot="actions">
+    <!-- <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
+      <a-list-item slot="renderItem" slot-scope="item" key="item.title">
+        <template v-if="item.is_self" slot="actions">
           <span @click="handleStarClick(item)">
             <a-icon
               v-if="item.favorited"
@@ -73,12 +53,15 @@
             @click="goUserPage(item.user.id)"
           />
           <div slot="description">
-            <span
-              v-for="(textItem, index) in item.txt"
-              :key="index"
-              :class="{ highlight: textItem.type !== 'text' }"
-              >{{ textItem.text }}</span
-            >
+            <div>
+              <span
+                v-for="(textItem, index) in item.txt"
+                :key="index"
+                :class="{ highlight: textItem.type !== 'text' }"
+                @click="highlighClick(textItem)"
+                >{{ textItem.text }}</span
+              >
+            </div>
             <img
               class="timeline-photo"
               v-if="item.photo"
@@ -112,7 +95,6 @@
       </a-list-item>
     </a-list>
     <div>
-      <!-- reply modal -->
       <a-modal
         :title="replyModalTitle"
         v-model="replyModalVisible"
@@ -133,7 +115,6 @@
           auto-focus
         />
       </a-modal>
-      <!-- retweet modal -->
       <a-modal
         v-model="retweetModalVisible"
         :closable="false"
@@ -153,7 +134,6 @@
           ref="textArea"
         />
       </a-modal>
-      <!-- delete modal -->
       <a-modal
         :title="deleteModalTitle"
         v-model="deleteModalVisible"
@@ -163,34 +143,23 @@
         cancelText="取消"
         @ok="deleteModalOkClick"
       >
-        <a-textarea
-          :defaultValue="deleteModalText"
-          :rows="4"
-          :disabled="true"
-        />
       </a-modal>
-    </div>
+    </div> -->
+    <Timeline :timelineType="timelineType"></Timeline>
   </div>
 </template>
 
 <script>
-import { getPhotos } from "../../utils/fanfouService";
+import { getHomeTimeline } from "@/utils/fanfouService";
+import Timeline from "@/components/Timeline";
 export default {
   data() {
     return {
+      timelineType: -1,
       loading: true,
       showLoadingMore: true,
       loadingMore: false,
       listData: [],
-      modalOption: {
-        type: -1,
-        title: "",
-        text: "",
-        visible: false
-      },
-      replyOption: {},
-      retweetOption: {},
-      deleteOption: {},
       // 回复
       replyStatusId: "",
       replyModalTitle: "",
@@ -205,18 +174,16 @@ export default {
       deleteStatusId: "",
       deleteModalTitle: "",
       deleteModalText: "",
-      deleteModalVisible: false,
-      // 分页
-      page: 1
+      deleteModalVisible: false
     };
   },
   mounted() {
-    this.loadingMore = false;
-    this.loadData();
+    // this.loadData();
+    this.timelineType = 0;
   },
   methods: {
     async loadData() {
-      const listData = await getPhotos();
+      const listData = await getHomeTimeline();
       if (listData === null) {
         this.$message.error("获取数据失败");
       } else {
@@ -229,10 +196,9 @@ export default {
         return;
       }
       this.loadingMore = true;
-      this.page += 1;
-      const listData = await getPhotos({ page: this.page });
+      const maxId = this.listData[this.listData.length - 1].id;
+      const listData = await getHomeTimeline({ max_id: maxId });
       if (listData === null) {
-        this.page -= 1;
         this.$message.error("获取数据失败");
       } else {
         if (listData.length === 0) {
@@ -257,16 +223,11 @@ export default {
       this.retweetModalText = `转@${item.user.screen_name} ${item.plain_text}`;
       this.retweetModalVisible = true;
       this.$nextTick(() => {
-        console.log(this.$refs.textArea);
         this.$refs.textArea.focus();
-        console.log(this.$refs.textArea.setSelectionRange);
-        console.log(this.$refs.textArea.createTextRange);
       });
       console.log(item);
     },
     handleDeleteClick(item) {
-      this.deleteModalTitle = `你确定要删除这条消息吗？`;
-      this.deleteModalText = item.plain_text;
       this.deleteModalVisible = true;
       console.log(item);
     },
@@ -276,29 +237,25 @@ export default {
     deleteModalOkClick() {
       alert(123);
     },
+    highlighClick(textItem) {
+      if (textItem.type === "at") {
+        // alert(textItem.text);
+        this.$router.push({
+          path: "/profile",
+          query: { userId: textItem.id, userName: textItem.name }
+        });
+      } else if (textItem.type === "link") {
+        window.open(textItem.text);
+      }
+    },
     goUserPage(userId) {
       alert(userId);
     }
+  },
+  components: {
+    Timeline
   }
 };
 </script>
 
-<style lang="less" scoped>
-.timeline-photo {
-  margin-top: 10px;
-  // width: 300px;
-  width: 100%;
-  border-radius: 5px;
-}
-.load-more-button {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-.load-more-icon {
-  font-size: 16px;
-  color: #f7f7f7;
-  opacity: 0.65;
-  transform: rotate(90deg);
-}
-</style>
+<style lang="less" scoped></style>

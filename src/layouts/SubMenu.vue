@@ -12,7 +12,9 @@
         :key="item.key"
         @click="
           () =>
-            parent.$router.push({ path: item.path, query: parent.$route.query })
+            parent.$router.replace({
+              path: item.path
+            })
         "
       >
         <a-icon v-if="item.meta.icon" :type="item.meta.icon" />

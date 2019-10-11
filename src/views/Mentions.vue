@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="header">首页</div>
+    <div class="header">@提到我的</div>
     <!-- list -->
-    <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
+    <!-- <a-list v-if="!loading" itemLayout="vertical" :dataSource="listData">
       <a-list-item slot="renderItem" slot-scope="item" key="item.title">
         <template v-if="item.is_self" slot="actions">
           <span @click="handleStarClick(item)">
@@ -53,15 +53,12 @@
             @click="goUserPage(item.user.id)"
           />
           <div slot="description">
-            <div>
-              <span
-                v-for="(textItem, index) in item.txt"
-                :key="index"
-                :class="{ highlight: textItem.type !== 'text' }"
-                @click="highlighClick(textItem)"
-                >{{ textItem.text }}</span
-              >
-            </div>
+            <span
+              v-for="(textItem, index) in item.txt"
+              :key="index"
+              :class="{ highlight: textItem.type !== 'text' }"
+              >{{ textItem.text }}</span
+            >
             <img
               class="timeline-photo"
               v-if="item.photo"
@@ -95,7 +92,6 @@
       </a-list-item>
     </a-list>
     <div>
-      <!-- reply modal -->
       <a-modal
         :title="replyModalTitle"
         v-model="replyModalVisible"
@@ -116,7 +112,6 @@
           auto-focus
         />
       </a-modal>
-      <!-- retweet modal -->
       <a-modal
         v-model="retweetModalVisible"
         :closable="false"
@@ -136,7 +131,6 @@
           ref="textArea"
         />
       </a-modal>
-      <!-- delete modal -->
       <a-modal
         :title="deleteModalTitle"
         v-model="deleteModalVisible"
@@ -147,41 +141,46 @@
         @ok="deleteModalOkClick"
       >
       </a-modal>
-    </div>
+    </div> -->
+    <Timeline :timelineType="timelineType"></Timeline>
   </div>
 </template>
 
 <script>
-import { getHomeTimeline } from "../../utils/fanfouService";
+import { getMentions } from "@/utils/fanfouService";
+import Timeline from "@/components/Timeline";
 export default {
   data() {
     return {
+      timelineType: -1,
       loading: true,
       showLoadingMore: true,
       loadingMore: false,
       listData: [],
-      actions: [
-        { type: "rollback", text: "" },
-        { type: "star", text: "" },
-        { type: "retweet", text: "" }
-      ],
+      // 回复
+      replyStatusId: "",
       replyModalTitle: "",
       replyModalText: "",
       replyModalVisible: false,
+      // 转发
+      retweetStatusId: "",
       retweetModalTitle: "",
       retweetModalText: "",
       retweetModalVisible: false,
+      // 删除
+      deleteStatusId: "",
       deleteModalTitle: "",
+      deleteModalText: "",
       deleteModalVisible: false
     };
   },
   mounted() {
-    this.loadingMore = false;
-    this.loadData();
+    this.timelineType = 1;
+    // this.loadData();
   },
   methods: {
     async loadData() {
-      const listData = await getHomeTimeline();
+      const listData = await getMentions();
       if (listData === null) {
         this.$message.error("获取数据失败");
       } else {
@@ -195,7 +194,7 @@ export default {
       }
       this.loadingMore = true;
       const maxId = this.listData[this.listData.length - 1].id;
-      const listData = await getHomeTimeline({ max_id: maxId });
+      const listData = await getMentions({ max_id: maxId });
       if (listData === null) {
         this.$message.error("获取数据失败");
       } else {
@@ -238,36 +237,14 @@ export default {
     deleteModalOkClick() {
       alert(123);
     },
-    highlighClick(textItem) {
-      if (textItem.type === "at") {
-        alert(textItem.text);
-      } else if (textItem.type === "link") {
-        window.open(textItem.text);
-      }
-    },
     goUserPage(userId) {
       alert(userId);
     }
+  },
+  components: {
+    Timeline
   }
 };
 </script>
 
-<style lang="less" scoped>
-.timeline-photo {
-  margin-top: 10px;
-  // width: 300px;
-  width: 100%;
-  border-radius: 5px;
-}
-.load-more-button {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-}
-.load-more-icon {
-  font-size: 16px;
-  color: #f7f7f7;
-  opacity: 0.65;
-  transform: rotate(90deg);
-}
-</style>
+<style lang="less" scoped></style>

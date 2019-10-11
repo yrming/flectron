@@ -69,8 +69,11 @@ export default {
   },
   watch: {
     "$route.path": function(val) {
-      this.selectedKeys = this.selectedKeysMap[val];
-      this.openKeys = this.collapsed ? [] : this.openKeysMap[val];
+      console.log(val);
+      if (val !== "/profile") {
+        this.selectedKeys = this.selectedKeysMap[val];
+        this.openKeys = this.collapsed ? [] : this.openKeysMap[val];
+      }
     }
   },
   data() {
@@ -127,7 +130,7 @@ export default {
         // alert("send");
         this.sendModalVisible = true;
       } else {
-        this.$router.push({ path: item.path, query: this.$route.query });
+        this.$router.replace({ path: item.path });
       }
     },
     handleCancel() {

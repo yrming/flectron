@@ -13,5 +13,14 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      window.onkeydown = function (e) {
+        var event = window.event || e;
+        var code = event.keyCode || event.which;
+        if (code === 82 && (event.metaKey || event.ctrlKey)) {
+          return false;
+        }
+      }
+    </script>
   </body>
 </html>

@@ -79,7 +79,7 @@
   background: #35383c;
 }
 .basic-layout-content {
-  margin: 36px 16px 16px 86px;
+  margin: 39px 16px 16px 86px;
   background: #212121;
   .header {
     position: fixed;
@@ -90,8 +90,8 @@
     z-index: 1;
     background: #212121;
     padding: 0;
-    height: 32px;
-    line-height: 32px;
+    height: 35px;
+    line-height: 35px;
     text-align: center;
     color: #c0c0c0;
     font-weight: bold;
@@ -139,6 +139,13 @@
 .ant-list-vertical .ant-list-item-meta {
   margin-bottom: 10px;
 }
+.ant-list-empty-text {
+  color: rgba(247, 247, 247, 0.75);
+}
+.ant-tabs-tab-prev,
+.ant-tabs-tab-next {
+  color: rgba(247, 247, 247, 0.75);
+}
 .ant-avatar {
   width: 40px;
   height: 40px;
@@ -156,6 +163,22 @@
 }
 ul {
   padding: 0;
+}
+.timeline-photo {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 5px;
+}
+.load-more-button {
+  background-color: transparent !important;
+  border: none;
+  box-shadow: none;
+}
+.load-more-icon {
+  font-size: 16px;
+  color: #f7f7f7;
+  opacity: 0.65;
+  transform: rotate(90deg);
 }
 .ant-modal-content {
   background-color: #060606;

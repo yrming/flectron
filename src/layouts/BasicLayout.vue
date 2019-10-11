@@ -16,8 +16,9 @@
         <a-layout-content class="basic-layout-content">
           <!-- <router-view></router-view> -->
           <keep-alive>
-            <router-view />
+            <router-view v-if="$route.meta.needsKeepAlive" />
           </keep-alive>
+          <router-view v-if="!$route.meta.needsKeepAlive" />
         </a-layout-content>
         <!-- <a-layout-footer style="text-align: center">
           <Footer></Footer>

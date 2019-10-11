@@ -86,6 +86,29 @@ const getHomeTimeline = async (opt = {}) => {
 };
 
 /**
+ * User Timeline
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const getUserTimeline = async (opt = {}) => {
+  const client = getClient();
+  let userTimeline = [];
+  try {
+    userTimeline = await client.get("/statuses/user_timeline", {
+      ...opt,
+      format: "html",
+      count: 30
+    });
+  } catch (error) {
+    console.log(JSON.stringify(error));
+    return null;
+  }
+  console.log(userTimeline);
+  return userTimeline;
+};
+
+/**
  * Mentions
  *
  * @param {*} [opt={}]
@@ -194,6 +217,27 @@ const getConversationList = async (opt = {}) => {
   return conversations;
 };
 
+/**
+ * User
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const getUserInfo = async (opt = {}) => {
+  const client = getClient();
+  let user = [];
+  try {
+    user = await client.get("/users/show", {
+      ...opt,
+      format: "html"
+    });
+  } catch (error) {
+    return null;
+  }
+  console.log(user);
+  return user;
+};
+
 export {
   xauth,
   getHomeTimeline,
@@ -201,5 +245,7 @@ export {
   getFavorites,
   destoryFavorite,
   getPhotos,
-  getConversationList
+  getConversationList,
+  getUserInfo,
+  getUserTimeline
 };
