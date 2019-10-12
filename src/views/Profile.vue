@@ -117,24 +117,24 @@ export default {
       this.$router.replace({ path: this.$route.query.from });
     },
     logoutClick() {
+      let self = this;
       this.$confirm({
         title: `确认退出当前账号（@${this.$route.query.userName}）吗？`,
-        content: "123",
+        content: "",
         cancelText: "取消",
         okText: "确认",
         onOk() {
-          return new Promise((resolve, reject) => {
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-          }).catch(() => console.log("Oops errors!"));
+          localStorage.removeItem("account");
+          self.$router.replace({
+            path: "/"
+          });
         },
         onCancel() {}
       });
     }
   },
   watch: {
-    "$route.query.userId"(newVal, oldVal) {
-      console.log(newVal);
-      console.log(oldVal);
+    "$route.query.userId"() {
       this.timelineType = -1;
       this.loadUserInfo();
     }
