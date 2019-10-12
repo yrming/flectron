@@ -6,7 +6,7 @@
           <a-icon type="arrow-left" />
         </div>
         <div class="user-name">
-          <img :src="userAvatar" alt="" />
+          <img :src="user.profile_image_url_large" alt="" />
           {{ $route.query.userName }}
         </div>
         <div class="right-btn"></div>
@@ -43,8 +43,8 @@
     </div>
     <div v-if="user.protected && !user.following">
       <div class="lock-tip">
-        <img src="@/assets/lock.png" alt="" />
-        <div class="tip">YOU SHALL NOT PASS</div>
+        <a-icon type="lock" />
+        <div class="tip">我只向关注我的人公开我的消息</div>
       </div>
     </div>
     <div v-else ref="timeline" style="padding-top:37px;">
@@ -64,7 +64,6 @@ export default {
     return {
       timelineType: -1,
       currentTabKey: 0,
-      userAvatar: "",
       user: {
         statuses_count: 0,
         favourites_count: 0,
@@ -72,7 +71,8 @@ export default {
         followers_count: 0,
         friends_count: 0,
         following: false,
-        protected: false
+        protected: false,
+        profile_image_url_large: ""
       }
     };
   },
@@ -87,7 +87,6 @@ export default {
         this.$message.error("获取数据失败");
       } else {
         this.user = user;
-        this.userAvatar = user.profile_image_origin_large;
         this.timelineType = 5;
       }
     },
@@ -173,19 +172,15 @@ export default {
   }
 }
 .lock-tip {
-  height: 90vh;
-  // line-height: 100vh;
+  margin-top: 37px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  img {
-    width: 20%;
-  }
+  color: rgba(247, 247, 247, 0.75);
+  font-size: 14px;
+  padding: 16px;
   .tip {
-    line-height: 50px;
-    color: #c0c0c0;
-    font-weight: bold;
+    margin-left: 8px;
   }
 }
 </style>
