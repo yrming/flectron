@@ -237,7 +237,7 @@ export default {
             if (listData.length > 0) {
               this.showLoadingMore = true;
             } else {
-              this.emptyText = "目前没有体到我的消息";
+              this.emptyText = "目前没有提到我的消息";
             }
             this.listData = listData;
           }
@@ -340,6 +340,8 @@ export default {
           } else {
             if (listData.length > 0) {
               this.showLoadingMore = true;
+            } else {
+              this.showLoadingMore = false;
             }
             this.listData = this.listData.concat(listData);
           }
@@ -359,6 +361,8 @@ export default {
           } else {
             if (listData.length > 0) {
               this.showLoadingMore = true;
+            } else {
+              this.showLoadingMore = false;
             }
             this.listData = this.listData.concat(listData);
           }
@@ -379,6 +383,8 @@ export default {
           } else {
             if (listData.length > 0) {
               this.showLoadingMore = true;
+            } else {
+              this.showLoadingMore = false;
             }
             this.listData = this.listData.concat(listData);
           }
@@ -399,6 +405,8 @@ export default {
           } else {
             if (listData.length > 0) {
               this.showLoadingMore = true;
+            } else {
+              this.showLoadingMore = false;
             }
             this.listData = this.listData.concat(listData);
           }
@@ -419,6 +427,8 @@ export default {
           } else {
             if (listData.length > 0) {
               this.showLoadingMore = true;
+            } else {
+              this.showLoadingMore = false;
             }
             this.listData = this.listData.concat(listData);
           }
@@ -438,6 +448,8 @@ export default {
           } else {
             if (listData.length > 0) {
               this.showLoadingMore = true;
+            } else {
+              this.showLoadingMore = false;
             }
             this.listData = this.listData.concat(listData);
           }
