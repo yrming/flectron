@@ -2,8 +2,12 @@
   <div>
     <div class="header-container">
       <div class="header-title">
-        <div v-if="$route.query.from" class="left-btn" @click="goBackClick">
-          <a-icon type="arrow-left" />
+        <div class="left-btn">
+          <a-icon
+            v-if="$route.query.from"
+            type="arrow-left"
+            @click="goBackClick"
+          />
         </div>
         <div class="user-name">
           <img :src="user.profile_image_url_large" alt="" />
@@ -41,7 +45,7 @@
         </a-tabs>
       </div>
     </div>
-    <div v-if="user.protected && !user.following">
+    <div v-if="user.id !== loginUserId && user.protected && !user.following">
       <div class="lock-tip">
         <a-icon type="lock" />
         <div class="tip">我只向关注我的人公开我的消息</div>
@@ -79,6 +83,15 @@ export default {
   mounted() {
     console.log(this.$route.query.userName);
     this.loadUserInfo();
+  },
+  computed: {
+    loginUserId() {
+      let account = JSON.parse(localStorage.getItem("account")) || {};
+      if (account && account.profile) {
+        return account.profile.id;
+      }
+      return "";
+    }
   },
   methods: {
     async loadUserInfo() {

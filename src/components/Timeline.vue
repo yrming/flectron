@@ -490,7 +490,6 @@ export default {
     },
     highlighClick(textItem) {
       if (textItem.type === "at") {
-        // alert(textItem.text);
         this.$router.push({
           path: "/profile",
           query: {

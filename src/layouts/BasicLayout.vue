@@ -45,19 +45,23 @@ export default {
         return "http://s3.meituan.net/v1/mss_3d027b52ec5a4d589e68050845611e68/avatar/l0/00/00/00.jpg";
       }
     },
-    userId() {
+    user() {
       let account = JSON.parse(localStorage.getItem("account")) || {};
       if (account && account.profile) {
-        // console.log(account.profile.id);
-        return account.profile.id;
+        return account.profile;
       }
-      // console.log(12321);
-      return "";
+      return {};
     }
   },
   methods: {
     goUserPage() {
-      alert(this.userId);
+      this.$router.push({
+        path: "/profile",
+        query: {
+          userId: this.user.id,
+          userName: this.user.screen_name
+        }
+      });
     }
   },
   components: {
