@@ -1,4 +1,5 @@
 import Fanfou from "fanfou-sdk-browser";
+import router from "../router";
 import { consumerKey, consumerSecret } from "../config/index";
 
 const apiDomain = "cors.fanfou.com";
@@ -19,17 +20,20 @@ const getClient = () => {
   let account = {};
   try {
     account = JSON.parse(localStorage.getItem("account"));
+    const { oauthToken, oauthTokenSecret } = account.token;
+    if (oauthToken && oauthTokenSecret) {
+      const client = new Fanfou({
+        ...opt,
+        oauthToken,
+        oauthTokenSecret
+      });
+      return client;
+    }
   } catch (error) {
     console.error(error);
-  }
-  const { oauthToken, oauthTokenSecret } = account.token;
-  if (oauthToken && oauthTokenSecret) {
-    const client = new Fanfou({
-      ...opt,
-      oauthToken,
-      oauthTokenSecret
+    router.replace({
+      path: "/"
     });
-    return client;
   }
 };
 
