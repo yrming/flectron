@@ -212,8 +212,18 @@ ul {
     textarea {
       resize: none;
     }
+    .ant-modal-confirm-body {
+      font-size: 14px;
+      .anticon-question-circle {
+        color: rgba(247, 247, 247, 0.65);
+      }
+      .ant-modal-confirm-title {
+        color: rgba(247, 247, 247, 0.65);
+      }
+    }
   }
-  .ant-modal-footer {
+  .ant-modal-footer,
+  .ant-modal-confirm-btns {
     background-color: #111112;
     border-top: 0px solid #313131;
     .ant-btn-default {

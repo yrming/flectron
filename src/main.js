@@ -39,6 +39,7 @@ Vue.use(Modal);
 Vue.use(Popconfirm);
 Vue.use(Tabs);
 Vue.prototype.$message = Message;
+Vue.prototype.$confirm = Modal.confirm;
 
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
 

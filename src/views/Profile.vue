@@ -13,7 +13,13 @@
           <img :src="user.profile_image_url_large" alt="" />
           {{ $route.query.userName }}
         </div>
-        <div class="right-btn"></div>
+        <div class="right-btn">
+          <a-icon
+            v-if="loginUserId === user.id"
+            type="logout"
+            @click="logoutClick"
+          />
+        </div>
       </div>
       <div class="header-nav">
         <a-tabs
@@ -109,6 +115,20 @@ export default {
     },
     goBackClick() {
       this.$router.replace({ path: this.$route.query.from });
+    },
+    logoutClick() {
+      this.$confirm({
+        title: `确认退出当前账号（@${this.$route.query.userName}）吗？`,
+        content: "123",
+        cancelText: "取消",
+        okText: "确认",
+        onOk() {
+          return new Promise((resolve, reject) => {
+            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          }).catch(() => console.log("Oops errors!"));
+        },
+        onCancel() {}
+      });
     }
   },
   watch: {
@@ -150,6 +170,9 @@ export default {
       width: 32px;
       height: 35px;
       line-height: 35px;
+    }
+    .right-btn {
+      text-align: right;
     }
     .user-name {
       display: flex;
