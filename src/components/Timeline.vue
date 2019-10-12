@@ -7,7 +7,7 @@
       :dataSource="listData"
     >
       <a-list-item slot="renderItem" slot-scope="item" key="item.title">
-        <template v-if="item.is_self" slot="actions">
+        <template v-if="item.is_self && timelineType !== 2" slot="actions">
           <span @click="handleStarClick(item)">
             <a-icon
               v-if="item.favorited"
@@ -23,6 +23,25 @@
           </span>
           <span @click="handleDeleteClick(item)">
             <a-icon type="delete" style="margin-right: 8px" />
+          </span>
+        </template>
+        <template
+          v-else-if="
+            item.is_self &&
+              timelineType == 2 &&
+              item.text === '此消息已删除或不公开'
+          "
+          slot="actions"
+        >
+          <span @click="handleStarClick(item)">
+            <a-icon
+              v-if="item.favorited"
+              type="star"
+              style="margin-right: 8px"
+              theme="twoTone"
+              twoToneColor="#fedd39"
+            />
+            <a-icon v-else type="star" style="margin-right: 8px" />
           </span>
         </template>
         <template v-else slot="actions">
