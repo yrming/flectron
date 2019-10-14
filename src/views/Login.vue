@@ -3,7 +3,7 @@
     <a-layout class="login-layout">
       <a-layout-content style="padding: 64px">
         <div class="login-top">
-          <img src="@/assets/logo.png" alt="" />
+          <!-- <img src="@/assets/logo.png" alt="" /> -->
           FLECTRON
         </div>
         <a-form :form="form" class="login-form" @submit="handleSubmit">
@@ -69,7 +69,7 @@
         </a-form>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
-        Flectron ©2019 Created by YRMING
+        Code with ❤️️ by YRMING
       </a-layout-footer>
     </a-layout>
   </div>

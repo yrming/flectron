@@ -6,7 +6,7 @@ import "nprogress/nprogress.css";
 Vue.use(Router);
 
 const router = new Router({
-  mode: "history",
+  // mode: "history",
   routes: [
     {
       path: "/",

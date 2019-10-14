@@ -47,7 +47,7 @@ function createWindow() {
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL("app://./index.html");
+    win.loadURL("http://localhost:8080");
   }
 
   // win.on("closed", () => {
