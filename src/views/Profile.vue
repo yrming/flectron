@@ -24,7 +24,7 @@
       <div class="header-nav">
         <a-tabs
           :animated="false"
-          defaultActiveKey="5"
+          :activeKey="currentTabKey"
           size="small"
           @change="callback"
         >
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       timelineType: -1,
-      currentTabKey: 0,
+      currentTabKey: "5",
       user: {
         statuses_count: 0,
         favourites_count: 0,
@@ -136,6 +136,7 @@ export default {
   watch: {
     "$route.query.userId"() {
       this.timelineType = -1;
+      this.currentTabKey = "5";
       this.loadUserInfo();
     }
   },
