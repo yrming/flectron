@@ -42,11 +42,11 @@
           ></a-tab-pane>
           <a-tab-pane
             :tab="'关注(' + user.friends_count + ')'"
-            key="7"
+            key="6"
           ></a-tab-pane>
           <a-tab-pane
             :tab="'粉丝(' + user.followers_count + ')'"
-            key="6"
+            key="7"
           ></a-tab-pane>
         </a-tabs>
       </div>
@@ -57,7 +57,7 @@
         <div class="tip">我只向关注我的人公开我的消息</div>
       </div>
     </div>
-    <div v-else ref="timeline" style="padding-top:37px;">
+    <div v-else style="padding-top:37px;">
       <Timeline
         :timelineType="timelineType"
         :userId="$route.query.userId"
@@ -106,7 +106,10 @@ export default {
         this.$message.error("获取数据失败");
       } else {
         this.user = user;
-        this.timelineType = 5;
+        this.timelineType = -1;
+        setTimeout(() => {
+          this.timelineType = 5;
+        }, 100);
       }
     },
     callback(key) {

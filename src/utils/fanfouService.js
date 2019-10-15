@@ -242,6 +242,50 @@ const getUserInfo = async (opt = {}) => {
   return user;
 };
 
+/**
+ * Friends
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const getUserFriends = async (opt = {}) => {
+  const client = getClient();
+  let friends = [];
+  try {
+    friends = await client.get("/users/friends", {
+      ...opt,
+      format: "html",
+      count: 30
+    });
+  } catch (error) {
+    return null;
+  }
+  console.log(friends);
+  return friends;
+};
+
+/**
+ * Followers
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const getUserFollowers = async (opt = {}) => {
+  const client = getClient();
+  let followers = [];
+  try {
+    followers = await client.get("/users/followers", {
+      ...opt,
+      format: "html",
+      count: 30
+    });
+  } catch (error) {
+    return null;
+  }
+  console.log(followers);
+  return followers;
+};
+
 export {
   xauth,
   getHomeTimeline,
@@ -251,5 +295,7 @@ export {
   getPhotos,
   getConversationList,
   getUserInfo,
-  getUserTimeline
+  getUserTimeline,
+  getUserFriends,
+  getUserFollowers
 };

@@ -44,6 +44,27 @@
             <a-icon v-else type="star" style="margin-right: 8px" />
           </span>
         </template>
+        <template
+          v-else-if="timelineType == 6 || timelineType == 7"
+          slot="actions"
+        >
+          <span @click="handleReplyClick(item)">
+            <a-icon type="rollback" style="margin-right: 8px" />
+          </span>
+          <span @click="handleStarClick(item)">
+            <a-icon
+              v-if="item.favorited"
+              type="star"
+              style="margin-right: 8px"
+              theme="twoTone"
+              twoToneColor="#fedd39"
+            />
+            <a-icon v-else type="star" style="margin-right: 8px" />
+          </span>
+          <span @click="handleRetweetClick(item)">
+            <a-icon type="retweet" style="margin-right: 8px" />
+          </span>
+        </template>
         <template v-else slot="actions">
           <span @click="handleReplyClick(item)">
             <a-icon type="rollback" style="margin-right: 8px" />
@@ -62,7 +83,24 @@
             <a-icon type="retweet" style="margin-right: 8px" />
           </span>
         </template>
-        <a-list-item-meta>
+        <a-list-item-meta v-if="timelineType == 6 || timelineType == 7">
+          <div slot="title" class="list-title">
+            <div class="screen-name" @click="goUserPage(item.id)">
+              {{ item.screen_name }}
+            </div>
+          </div>
+          <a-avatar
+            slot="avatar"
+            :src="item.profile_image_origin_large"
+            @click="goUserPage(item.id)"
+          />
+          <div slot="description">
+            <div>
+              <span>{{ item.status && item.status.text }}</span>
+            </div>
+          </div>
+        </a-list-item-meta>
+        <a-list-item-meta v-else>
           <div slot="title" class="list-title">
             <div class="screen-name" @click="goUserPage(item.user.id)">
               {{ item.user.screen_name }}
@@ -180,13 +218,15 @@ import {
   getFavorites,
   getConversationList,
   getPhotos,
-  getUserTimeline
+  getUserTimeline,
+  getUserFriends,
+  getUserFollowers
 } from "@/utils/fanfouService";
 export default {
   props: {
     timelineType: {
       type: Number,
-      default: -1 // 0：我的消息；1：@提到的；2：收藏；3：私信列表；4：照片; 5: 他人的消息
+      default: -1 // 0：我的消息；1：@提到的；2：收藏；3：私信列表；4：照片; 5: 他人的消息; 6: 关注; 7: 粉丝
     }
   },
   data() {
@@ -331,6 +371,40 @@ export default {
             this.listData = listData;
           }
           break;
+        case 6:
+          if (this.$route.query && this.$route.query.userId) {
+            listData = await getUserFriends({ id: this.$route.query.userId });
+          } else {
+            listData = await getUserFriends();
+          }
+          if (listData === null) {
+            this.$message.error("获取数据失败");
+          } else {
+            if (listData.length > 0) {
+              this.showLoadingMore = true;
+            } else {
+              this.emptyText = "目前没有关注";
+            }
+            this.listData = listData;
+          }
+          break;
+        case 7:
+          if (this.$route.query && this.$route.query.userId) {
+            listData = await getUserFollowers({ id: this.$route.query.userId });
+          } else {
+            listData = await getUserFollowers();
+          }
+          if (listData === null) {
+            this.$message.error("获取数据失败");
+          } else {
+            if (listData.length > 0) {
+              this.showLoadingMore = true;
+            } else {
+              this.emptyText = "目前没有粉丝";
+            }
+            this.listData = listData;
+          }
+          break;
         default:
           break;
       }
@@ -463,6 +537,50 @@ export default {
             listData = await getUserTimeline({ max_id: maxId });
           }
           if (listData === null) {
+            this.$message.error("获取数据失败");
+          } else {
+            if (listData.length > 0) {
+              this.showLoadingMore = true;
+            } else {
+              this.showLoadingMore = false;
+            }
+            this.listData = this.listData.concat(listData);
+          }
+          break;
+        case 6:
+          this.page += 1;
+          if (this.$route.query && this.$route.query.userId) {
+            listData = await getUserFriends({
+              page: this.page,
+              id: this.$route.query.userId
+            });
+          } else {
+            listData = await getUserFriends({ page: this.page });
+          }
+          if (listData === null) {
+            this.page -= 1;
+            this.$message.error("获取数据失败");
+          } else {
+            if (listData.length > 0) {
+              this.showLoadingMore = true;
+            } else {
+              this.showLoadingMore = false;
+            }
+            this.listData = this.listData.concat(listData);
+          }
+          break;
+        case 7:
+          this.page += 1;
+          if (this.$route.query && this.$route.query.userId) {
+            listData = await getUserFollowers({
+              page: this.page,
+              id: this.$route.query.userId
+            });
+          } else {
+            listData = await getUserFollowers({ page: this.page });
+          }
+          if (listData === null) {
+            this.page -= 1;
             this.$message.error("获取数据失败");
           } else {
             if (listData.length > 0) {
