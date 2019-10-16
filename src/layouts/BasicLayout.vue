@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { getAccount } from "@/utils/fanfouService";
 import SiderMenu from "./SiderMenu";
 export default {
   data() {
@@ -38,7 +39,7 @@ export default {
   },
   computed: {
     avatarUrl() {
-      let account = JSON.parse(localStorage.getItem("account")) || {};
+      let account = getAccount();
       if (account && account.profile) {
         return account.profile.profile_image_origin_large;
       } else {
@@ -46,7 +47,7 @@ export default {
       }
     },
     user() {
-      let account = JSON.parse(localStorage.getItem("account")) || {};
+      let account = getAccount();
       if (account && account.profile) {
         return account.profile;
       }

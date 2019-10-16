@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { getUserInfo } from "@/utils/fanfouService";
+import { getUserInfo, setAccount, getAccount } from "@/utils/fanfouService";
 import Timeline from "@/components/Timeline";
 export default {
   data() {
@@ -92,7 +92,7 @@ export default {
   },
   computed: {
     loginUserId() {
-      let account = JSON.parse(localStorage.getItem("account")) || {};
+      let account = getAccount();
       if (account && account.profile) {
         return account.profile.id;
       }
@@ -127,7 +127,7 @@ export default {
         cancelText: "取消",
         okText: "确认",
         onOk() {
-          localStorage.removeItem("account");
+          setAccount({});
           self.$router.replace({
             path: "/"
           });

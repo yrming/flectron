@@ -1,25 +1,24 @@
-import Fanfou from "fanfou-sdk-browser";
+// import Fanfou from "../utils/fanfou-sdk-node/index";
+const Fanfou = require("fanfou-sdk");
+import Store from "electron-store";
 import router from "../router";
 import { consumerKey, consumerSecret } from "../config/index";
 
-const apiDomain = "cors.fanfou.com";
-const oauthDomain = "cors.fanfou.com";
-const hooks = {
-  baseString: baseStr => {
-    return baseStr
-      .replace(
-        "%2F%2Fcors.fanfou.com%2Foauth",
-        "http%3A%2F%2Ffanfou.com%2Foauth"
-      )
-      .replace("%2F%2Fcors.fanfou.com", "http%3A%2F%2Fapi.fanfou.com");
-  }
+const store = new Store();
+const opt = { consumerKey, consumerSecret };
+
+const setAccount = account => {
+  store.set("account", account);
 };
-const opt = { consumerKey, consumerSecret, apiDomain, oauthDomain, hooks };
+
+const getAccount = () => {
+  return store.get("account");
+};
 
 const getClient = () => {
   let account = {};
   try {
-    account = JSON.parse(localStorage.getItem("account"));
+    account = store.get("account");
     const { oauthToken, oauthTokenSecret } = account.token;
     if (oauthToken && oauthTokenSecret) {
       const client = new Fanfou({
@@ -287,6 +286,8 @@ const getUserFollowers = async (opt = {}) => {
 };
 
 export {
+  setAccount,
+  getAccount,
   xauth,
   getHomeTimeline,
   getMentions,

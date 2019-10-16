@@ -1,6 +1,6 @@
 <template>
   <div class="login-layout-wrapper">
-    <a-layout class="login-layout">
+    <a-layout v-if="!loading" class="login-layout">
       <a-layout-content style="padding: 64px">
         <div class="login-top">
           <!-- <img src="@/assets/logo.png" alt="" /> -->
@@ -61,7 +61,7 @@
               type="primary"
               html-type="submit"
               class="login-form-button"
-              :loading="loading"
+              :loading="sumbitLoading"
             >
               登 录
             </a-button>
@@ -72,32 +72,46 @@
         Code with ❤️️ by YRMING
       </a-layout-footer>
     </a-layout>
+    <a-layout v-else>
+      <a-spin style="height:100vh;line-height:100vh;" />
+    </a-layout>
   </div>
 </template>
 <script>
-import { xauth } from "@/utils/fanfouService";
+import { xauth, setAccount, getAccount } from "@/utils/fanfouService";
+
 export default {
   data() {
     return {
-      loading: false
+      loading: true,
+      sumbitLoading: false
     };
   },
   beforeCreate() {
     this.form = this.$form.createForm(this);
+  },
+  mounted() {
+    let account = getAccount();
+    if (account && account.token) {
+      this.$router.replace({ path: "/home" });
+    } else {
+      this.loading = false;
+    }
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          this.loading = true;
+          this.sumbitLoading = true;
           (async () => {
             let userInfo = await xauth(values.userName, values.password);
             if (!userInfo) {
               this.$message.error("登录失败，账号或密码错误");
-              this.loading = false;
+              this.sumbitLoading = false;
             } else {
-              localStorage.setItem("account", JSON.stringify(userInfo));
+              setAccount(userInfo);
+              console.log(getAccount());
               this.$router.replace({ path: "/home" });
             }
           })();

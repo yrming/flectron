@@ -34,7 +34,9 @@ function createWindow() {
     maxHeight: 710,
     transparent: true,
     titleBarStyle: "hidden",
+    backgroundColor: "#212121",
     webPreferences: {
+      webSecurity: false,
       experimentalFeatures: true,
       nodeIntegration: true
     }
@@ -47,7 +49,7 @@ function createWindow() {
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL("http://localhost:8080");
+    win.loadURL("app://./index.html");
   }
 
   // win.on("closed", () => {
