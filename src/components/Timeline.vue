@@ -1,6 +1,7 @@
 <template>
   <div>
     <a-list
+      ref="list"
       v-if="!loading"
       itemLayout="vertical"
       :locale="{ emptyText: emptyText }"
@@ -12,17 +13,16 @@
             <a-icon
               v-if="item.favorited"
               type="star"
-              style="margin-right: 8px"
               theme="twoTone"
               twoToneColor="#fedd39"
             />
-            <a-icon v-else type="star" style="margin-right: 8px" />
+            <a-icon v-else type="star" />
           </span>
           <span @click="handleRetweetClick(item)">
-            <a-icon type="retweet" style="margin-right: 8px" />
+            <a-icon type="retweet" />
           </span>
           <span @click="handleDeleteClick(item)">
-            <a-icon type="delete" style="margin-right: 8px" />
+            <a-icon type="delete" />
           </span>
         </template>
         <template
@@ -37,50 +37,43 @@
             <a-icon
               v-if="item.favorited"
               type="star"
-              style="margin-right: 8px"
               theme="twoTone"
               twoToneColor="#fedd39"
             />
-            <a-icon v-else type="star" style="margin-right: 8px" />
+            <a-icon v-else type="star" />
           </span>
         </template>
         <template
           v-else-if="timelineType == 6 || timelineType == 7"
           slot="actions"
         >
-          <span @click="handleReplyClick(item)">
-            <a-icon type="rollback" style="margin-right: 8px" />
-          </span>
-          <span @click="handleStarClick(item)">
+          <span>
             <a-icon
-              v-if="item.favorited"
-              type="star"
-              style="margin-right: 8px"
-              theme="twoTone"
-              twoToneColor="#fedd39"
+              @click="handleUnFoClick(item)"
+              v-if="item.following"
+              type="link"
             />
-            <a-icon v-else type="star" style="margin-right: 8px" />
+            <a-icon @click="handleFoClick(item)" v-else type="api" />
           </span>
-          <span @click="handleRetweetClick(item)">
-            <a-icon type="retweet" style="margin-right: 8px" />
+          <span>
+            <a-icon @click="handleSendMsgClick(item)" type="message" />
           </span>
         </template>
         <template v-else slot="actions">
           <span @click="handleReplyClick(item)">
-            <a-icon type="rollback" style="margin-right: 8px" />
+            <a-icon type="rollback" />
           </span>
           <span @click="handleStarClick(item)">
             <a-icon
               v-if="item.favorited"
               type="star"
-              style="margin-right: 8px"
               theme="twoTone"
               twoToneColor="#fedd39"
             />
-            <a-icon v-else type="star" style="margin-right: 8px" />
+            <a-icon v-else type="star" />
           </span>
           <span @click="handleRetweetClick(item)">
-            <a-icon type="retweet" style="margin-right: 8px" />
+            <a-icon type="retweet" />
           </span>
         </template>
         <a-list-item-meta v-if="timelineType == 6 || timelineType == 7">
@@ -96,21 +89,27 @@
           />
           <div slot="description">
             <div>
-              <span>{{ item.status && item.status.text }}</span>
+              <span v-if="!item.following && item.protected"
+                ><a-icon type="lock"
+              /></span>
+              <span v-else>{{ item.status && item.status.text }}</span>
             </div>
           </div>
         </a-list-item-meta>
         <a-list-item-meta v-else>
           <div slot="title" class="list-title">
-            <div class="screen-name" @click="goUserPage(item.user.id)">
-              {{ item.user.screen_name }}
+            <div
+              class="screen-name"
+              @click="goUserPage(item.user && item.user.id)"
+            >
+              {{ item.user && item.user.screen_name }}
             </div>
             <div class="time">{{ item.created_at | dateFormat }}</div>
           </div>
           <a-avatar
             slot="avatar"
-            :src="item.user.profile_image_origin_large"
-            @click="goUserPage(item.user.id)"
+            :src="item.user && item.user.profile_image_origin_large"
+            @click="goUserPage(item.user && item.user.id)"
           />
           <div slot="description">
             <div>
@@ -260,6 +259,7 @@ export default {
       this.showLoadingMore = false;
       this.loadingMore = false;
       this.page = 1;
+      document.documentElement.scrollTop = 0;
       this.loadData();
     }
   },
@@ -283,6 +283,7 @@ export default {
             }
             this.listData = listData;
           }
+          this.loading = false;
           break;
         case 1:
           if (this.$route.query && this.$route.query.userId) {
@@ -300,6 +301,7 @@ export default {
             }
             this.listData = listData;
           }
+          this.loading = false;
           break;
         case 2:
           if (this.$route.query && this.$route.query.userId) {
@@ -317,6 +319,7 @@ export default {
             }
             this.listData = listData;
           }
+          this.loading = false;
           break;
         case 3:
           if (this.$route.query && this.$route.query.userId) {
@@ -336,6 +339,7 @@ export default {
             }
             this.listData = listData;
           }
+          this.loading = false;
           break;
         case 4:
           if (this.$route.query && this.$route.query.userId) {
@@ -353,6 +357,7 @@ export default {
             }
             this.listData = listData;
           }
+          this.loading = false;
           break;
         case 5:
           if (this.$route.query && this.$route.query.userId) {
@@ -370,6 +375,7 @@ export default {
             }
             this.listData = listData;
           }
+          this.loading = false;
           break;
         case 6:
           if (this.$route.query && this.$route.query.userId) {
@@ -387,6 +393,7 @@ export default {
             }
             this.listData = listData;
           }
+          this.loading = false;
           break;
         case 7:
           if (this.$route.query && this.$route.query.userId) {
@@ -404,11 +411,11 @@ export default {
             }
             this.listData = listData;
           }
+          this.loading = false;
           break;
         default:
           break;
       }
-      this.loading = false;
     },
     async onLoadMore() {
       if (this.loadingMore || this.listData.length === 0) {
@@ -641,6 +648,15 @@ export default {
     },
     goUserPage(userId) {
       alert(userId);
+    },
+    handleUnFoClick(item) {
+      console.log(item);
+    },
+    handleFoClick(item) {
+      console.log(item);
+    },
+    handleSendMsgClick(item) {
+      console.log(item);
     }
   }
 };
