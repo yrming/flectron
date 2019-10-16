@@ -18,34 +18,7 @@ import Timeline from "@/components/Timeline";
 export default {
   data() {
     return {
-      timelineType: -1,
-      loading: true,
-      showLoadingMore: true,
-      loadingMore: false,
-      listData: [],
-      modalOption: {
-        type: -1,
-        title: "",
-        text: "",
-        visible: false
-      },
-      // 回复
-      replyStatusId: "",
-      replyModalTitle: "",
-      replyModalText: "",
-      replyModalVisible: false,
-      // 转发
-      retweetStatusId: "",
-      retweetModalTitle: "",
-      retweetModalText: "",
-      retweetModalVisible: false,
-      // 删除
-      deleteStatusId: "",
-      deleteModalTitle: "",
-      deleteModalText: "",
-      deleteModalVisible: false,
-      // 分页
-      page: 1
+      timelineType: -1
     };
   },
   mounted() {

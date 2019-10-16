@@ -20,6 +20,7 @@
     "electron-store": "^5.0.0",
     "fanfou-sdk": "^4.0.5",
     "nprogress": "^0.2.0",
+    "view-design": "^4.0.1",
     "vue": "^2.6.10",
     "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.0.3",

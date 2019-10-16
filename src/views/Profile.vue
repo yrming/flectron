@@ -11,7 +11,7 @@
         </div>
         <div class="user-name">
           <img :src="user.profile_image_url_large" alt="" />
-          {{ $route.query.userName }}
+          {{ user.screen_name }}
         </div>
         <div class="right-btn">
           <a-icon

@@ -26,11 +26,7 @@
           </span>
         </template>
         <template
-          v-else-if="
-            item.is_self &&
-              timelineType == 2 &&
-              item.text === '此消息已删除或不公开'
-          "
+          v-else-if="timelineType == 2 && item.text === '此消息已删除或不公开'"
           slot="actions"
         >
           <span @click="handleStarClick(item)">
@@ -638,8 +634,7 @@ export default {
           path: "/profile",
           query: {
             from: this.$route.fullPath,
-            userId: textItem.id,
-            userName: textItem.name
+            userId: textItem.id
           }
         });
       } else if (textItem.type === "link") {
@@ -647,7 +642,13 @@ export default {
       }
     },
     goUserPage(userId) {
-      alert(userId);
+      this.$router.push({
+        path: "/profile",
+        query: {
+          from: this.$route.fullPath,
+          userId: userId
+        }
+      });
     },
     handleUnFoClick(item) {
       console.log(item);
