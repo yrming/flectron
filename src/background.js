@@ -27,9 +27,7 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 450,
-    // minWidth: 450,
-    // maxWidth: 450,
-    minWidth: 750,
+    minWidth: 450,
     height: 710,
     minHeight: 710,
     maxHeight: 710,
@@ -37,9 +35,9 @@ function createWindow() {
     titleBarStyle: "hidden",
     backgroundColor: "#212121",
     webPreferences: {
-      webSecurity: false,
       experimentalFeatures: true,
-      nodeIntegration: true
+      nodeIntegration: true,
+      devTools: false
     }
   });
 

@@ -151,6 +151,7 @@ export default {
 
 <style lang="less" scoped>
 .header-container {
+  -webkit-app-region: drag;
   position: fixed;
   left: 70px;
   right: 0;

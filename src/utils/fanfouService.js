@@ -221,6 +221,27 @@ const getConversationList = async (opt = {}) => {
 };
 
 /**
+ * Conversation
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const getConversation = async (opt = {}) => {
+  const client = getClient();
+  let conversations = [];
+  try {
+    conversations = await client.get("/direct_messages/conversation", {
+      ...opt,
+      count: 30
+    });
+  } catch (error) {
+    return null;
+  }
+  console.log(conversations);
+  return conversations;
+};
+
+/**
  * User
  *
  * @param {*} [opt={}]
@@ -295,6 +316,7 @@ export {
   destoryFavorite,
   getPhotos,
   getConversationList,
+  getConversation,
   getUserInfo,
   getUserTimeline,
   getUserFriends,

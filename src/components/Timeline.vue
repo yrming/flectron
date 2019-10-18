@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-right: 16px;">
     <a-list
       ref="list"
       v-if="!loading"

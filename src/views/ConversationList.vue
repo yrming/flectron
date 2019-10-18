@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-right: 16px;">
     <div class="header">
       <div class="header-nav">
         <div class="left-btn"></div>
@@ -32,8 +32,8 @@
             "
             @click="goUserPage(item.otherid)"
           />
-          <div slot="description">
-            <div>{{ item.dm.text }}</div>
+          <div slot="description" @click="goPrivateMsgPage(item.otherid)">
+            <div style="cursor: pointer;">{{ item.dm.text }}</div>
           </div>
         </a-list-item-meta>
       </a-list-item>
@@ -156,6 +156,15 @@ export default {
     },
     goUserPage(userId) {
       alert(userId);
+    },
+    goPrivateMsgPage(userId) {
+      this.$router.push({
+        path: "/conversation",
+        query: {
+          from: this.$route.fullPath,
+          userId: userId
+        }
+      });
     }
   }
 };

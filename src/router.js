@@ -94,6 +94,13 @@ const router = new Router({
           hideInMenu: true,
           component: () =>
             import(/* webpackChunkName: "user" */ "./views/Profile")
+        },
+        {
+          path: "/conversation",
+          name: "conversation",
+          hideInMenu: true,
+          component: () =>
+            import(/* webpackChunkName: "user" */ "./views/Conversation")
         }
       ]
     },

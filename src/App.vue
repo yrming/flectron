@@ -64,7 +64,7 @@
   font-weight: bold;
 }
 .ant-layout-sider {
-  // background: #35383c;
+  -webkit-app-region: drag;
   background: #34383b;
   position: fixed;
   left: 0;
@@ -79,9 +79,11 @@
   background: #35383c;
 }
 .basic-layout-content {
-  margin: 39px 16px 16px 86px;
+  // margin: 39px 16px 16px 86px;
+  margin: 39px 0px 16px 86px;
   background: #212121;
   .header {
+    -webkit-app-region: drag;
     position: fixed;
     left: 70px;
     right: 0;
