@@ -15,7 +15,8 @@ import {
   Spin,
   Modal,
   Popconfirm,
-  Tabs
+  Tabs,
+  Upload
 } from "ant-design-vue";
 import { Scroll } from "view-design";
 import "view-design/dist/styles/iview.css";
@@ -40,6 +41,7 @@ Vue.use(Spin);
 Vue.use(Modal);
 Vue.use(Popconfirm);
 Vue.use(Tabs);
+Vue.use(Upload);
 Vue.component("Scroll", Scroll);
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = Modal.confirm;

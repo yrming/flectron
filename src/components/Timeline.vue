@@ -7,9 +7,9 @@
       :locale="{ emptyText: emptyText }"
       :dataSource="listData"
     >
-      <a-list-item slot="renderItem" slot-scope="item" key="item.title">
+      <a-list-item slot="renderItem" slot-scope="item, index" key="item.title">
         <template v-if="item.is_self && timelineType !== 2" slot="actions">
-          <span @click="handleStarClick(item)">
+          <span @click="handleStarClick(item, index)">
             <a-icon
               v-if="item.favorited"
               type="star"
@@ -18,10 +18,10 @@
             />
             <a-icon v-else type="star" />
           </span>
-          <span @click="handleRetweetClick(item)">
+          <span @click="handleRetweetClick(item, index)">
             <a-icon type="retweet" />
           </span>
-          <span @click="handleDeleteClick(item)">
+          <span @click="handleDeleteClick(item, index)">
             <a-icon type="delete" />
           </span>
         </template>
@@ -29,7 +29,7 @@
           v-else-if="timelineType == 2 && item.text === '此消息已删除或不公开'"
           slot="actions"
         >
-          <span @click="handleStarClick(item)">
+          <span @click="handleStarClick(item, index)">
             <a-icon
               v-if="item.favorited"
               type="star"
@@ -45,21 +45,21 @@
         >
           <span>
             <a-icon
-              @click="handleUnFoClick(item)"
+              @click="handleUnFoClick(item, index)"
               v-if="item.following"
               type="link"
             />
-            <a-icon @click="handleFoClick(item)" v-else type="api" />
+            <a-icon @click="handleFoClick(item, index)" v-else type="api" />
           </span>
           <span>
-            <a-icon @click="handleSendMsgClick(item)" type="message" />
+            <a-icon @click="handleSendMsgClick(item, index)" type="message" />
           </span>
         </template>
         <template v-else slot="actions">
-          <span @click="handleReplyClick(item)">
+          <span @click="handleReplyClick(item, index)">
             <a-icon type="rollback" />
           </span>
-          <span @click="handleStarClick(item)">
+          <span @click="handleStarClick(item, index)">
             <a-icon
               v-if="item.favorited"
               type="star"
@@ -68,7 +68,7 @@
             />
             <a-icon v-else type="star" />
           </span>
-          <span @click="handleRetweetClick(item)">
+          <span @click="handleRetweetClick(item, index)">
             <a-icon type="retweet" />
           </span>
         </template>
@@ -166,7 +166,7 @@
         <a-textarea
           :defaultValue="replyModalText"
           v-model="replyModalText"
-          :rows="4"
+          :autosize="true"
           maxlength="140"
           auto-focus
         />
@@ -186,7 +186,7 @@
         <a-textarea
           :defaultValue="retweetModalText"
           v-model="retweetModalText"
-          :rows="4"
+          :autosize="true"
           maxlength="140"
           ref="textArea"
         />
@@ -201,6 +201,14 @@
         cancelText="取消"
         @ok="deleteModalOkClick"
       >
+        <a-textarea
+          :disabled="true"
+          :defaultValue="deleteModalText"
+          v-model="deleteModalText"
+          maxlength="140"
+          :autosize="true"
+          ref="textArea"
+        />
       </a-modal>
     </div>
   </div>
@@ -215,7 +223,11 @@ import {
   getPhotos,
   getUserTimeline,
   getUserFriends,
-  getUserFollowers
+  getUserFollowers,
+  deleteStatus,
+  createFavorite,
+  destroyFavorite,
+  postStatus
 } from "@/utils/fanfouService";
 export default {
   props: {
@@ -232,6 +244,7 @@ export default {
       listData: [],
       emptyText: "",
       page: 1,
+      currentListItemIndex: -1,
       // 回复
       replyStatusId: "",
       replyModalTitle: "",
@@ -244,7 +257,7 @@ export default {
       retweetModalVisible: false,
       // 删除
       deleteStatusId: "",
-      deleteModalTitle: "",
+      deleteModalTitle: "确认删除这条消息吗？",
       deleteModalText: "",
       deleteModalVisible: false
     };
@@ -599,18 +612,42 @@ export default {
       }
       this.loadingMore = false;
     },
-    handleReplyClick(item) {
+    handleReplyClick(item, index) {
+      console.log(index);
+      this.replyStatusId = item.id;
       this.replyModalTitle = `回复：${item.plain_text}`;
       this.replyModalText = `@${item.user.screen_name} `;
       this.replyModalVisible = true;
     },
-    replyModalOkClick() {
-      alert(123);
+    async replyModalOkClick() {
+      let data = await postStatus({
+        in_reply_to_status_id: this.replyStatusId,
+        status: this.replyModalText
+      });
+      if (data === null) {
+        this.$message.error("回复失败");
+      }
+      this.replyModalVisible = false;
+      this.$message.success("回复成功");
     },
-    handleStarClick(item) {
-      console.log(item);
+    async handleStarClick(item, index) {
+      let data;
+      if (item.favorited) {
+        data = await destroyFavorite(item.id);
+        if (data === null) {
+          this.$message.error("取消收藏失败");
+        }
+      } else {
+        data = await createFavorite(item.id);
+        if (data === null) {
+          this.$message.error("收藏失败");
+        }
+      }
+      this.listData[index].favorited = !item.favorited;
     },
-    handleRetweetClick(item) {
+    handleRetweetClick(item, index) {
+      console.log(index);
+      this.retweetStatusId = item.id;
       this.retweetModalText = `转@${item.user.screen_name} ${item.plain_text}`;
       this.retweetModalVisible = true;
       this.$nextTick(() => {
@@ -618,15 +655,32 @@ export default {
       });
       console.log(item);
     },
-    handleDeleteClick(item) {
+    handleDeleteClick(item, index) {
+      console.log(index);
+      this.deleteModalText = item.plain_text;
+      this.deleteStatusId = item.id;
+      this.currentListItemIndex = index;
       this.deleteModalVisible = true;
-      console.log(item);
     },
-    retweetModalOkClick() {
-      alert(123);
+    async retweetModalOkClick() {
+      let data = await postStatus({
+        repost_status_id: this.retweetStatusId,
+        status: this.retweetModalText
+      });
+      if (data === null) {
+        this.$message.error("转发失败");
+      }
+      this.retweetModalVisible = false;
+      this.$message.success("转发成功");
     },
-    deleteModalOkClick() {
-      alert(123);
+    async deleteModalOkClick() {
+      let data = await deleteStatus({ id: this.deleteStatusId });
+      if (data === null) {
+        this.$message.error("删除失败");
+      }
+      this.deleteModalVisible = false;
+      this.listData.splice(this.currentListItemIndex, 1);
+      this.$message.success("删除成功");
     },
     highlighClick(textItem) {
       if (textItem.type === "at") {
@@ -650,14 +704,17 @@ export default {
         }
       });
     },
-    handleUnFoClick(item) {
+    handleUnFoClick(item, index) {
       console.log(item);
+      console.log(index);
     },
-    handleFoClick(item) {
+    handleFoClick(item, index) {
       console.log(item);
+      console.log(index);
     },
-    handleSendMsgClick(item) {
+    handleSendMsgClick(item, index) {
       console.log(item);
+      console.log(index);
     }
   }
 };

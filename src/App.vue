@@ -64,7 +64,6 @@
   font-weight: bold;
 }
 .ant-layout-sider {
-  -webkit-app-region: drag;
   background: #34383b;
   position: fixed;
   left: 0;

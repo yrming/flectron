@@ -1,4 +1,3 @@
-// import Fanfou from "../utils/fanfou-sdk-node/index";
 const Fanfou = require("fanfou-sdk");
 import Store from "electron-store";
 import router from "../router";
@@ -306,6 +305,93 @@ const getUserFollowers = async (opt = {}) => {
   return followers;
 };
 
+/**
+ * Send status
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const postStatus = async (opt = {}) => {
+  console.log(opt);
+  const client = getClient();
+  let status = {};
+  try {
+    if (opt.photo) {
+      status = await client.post("/photos/upload", {
+        ...opt
+      });
+    } else {
+      status = await client.post("/statuses/update", {
+        ...opt
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+  console.log(status);
+  return status;
+};
+
+/**
+ * Delete status
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const deleteStatus = async (opt = {}) => {
+  const client = getClient();
+  let status = {};
+  try {
+    status = await client.post("/statuses/destroy", {
+      ...opt
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+  console.log(status);
+  return status;
+};
+
+/**
+ * Create favorite
+ *
+ * @param {*} [id]
+ * @returns
+ */
+const createFavorite = async id => {
+  const client = getClient();
+  let status = {};
+  try {
+    status = await client.post(`/favorites/create/${id}`);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+  console.log(status);
+  return status;
+};
+
+/**
+ * Destroy favorite
+ *
+ * @param {*} [id]
+ * @returns
+ */
+const destroyFavorite = async id => {
+  const client = getClient();
+  let status = {};
+  try {
+    status = await client.post(`/favorites/destroy/${id}`);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+  console.log(status);
+  return status;
+};
+
 export {
   setAccount,
   getAccount,
@@ -320,5 +406,9 @@ export {
   getUserInfo,
   getUserTimeline,
   getUserFriends,
-  getUserFollowers
+  getUserFollowers,
+  postStatus,
+  deleteStatus,
+  createFavorite,
+  destroyFavorite
 };

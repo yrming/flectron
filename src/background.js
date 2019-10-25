@@ -32,12 +32,14 @@ function createWindow() {
     minHeight: 710,
     maxHeight: 710,
     transparent: true,
+    frame: false,
+    vibrancy: "ultra-dark",
     titleBarStyle: "hidden",
-    backgroundColor: "#212121",
+    // backgroundColor: "#212121",
     webPreferences: {
       experimentalFeatures: true,
-      nodeIntegration: true,
-      devTools: false
+      nodeIntegration: true
+      // devTools: false
     }
   });
 
