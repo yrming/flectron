@@ -69,7 +69,7 @@
         </a-form>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
-        Code with ❤️️ by YRMING
+        ❤️⭕️⭕️
       </a-layout-footer>
     </a-layout>
     <a-layout v-else>
