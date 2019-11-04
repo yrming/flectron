@@ -110,6 +110,7 @@ export default {
               this.$message.error("登录失败，账号或密码错误");
               this.sumbitLoading = false;
             } else {
+              userInfo._remember = values.remember;
               setAccount(userInfo);
               this.$router.replace({ path: "/home" });
             }

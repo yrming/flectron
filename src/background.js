@@ -1,6 +1,7 @@
 "use strict";
 
 import { app, protocol, BrowserWindow } from "electron";
+import Store from "electron-store";
 import {
   createProtocol,
   // eslint-disable-next-line no-unused-vars
@@ -84,7 +85,14 @@ app.on("activate", () => {
   win.show();
 });
 
-app.on("before-quit", () => (app.quitting = true));
+app.on("before-quit", () => {
+  app.quitting = true;
+  const store = new Store();
+  const account = store.get("account");
+  if (!account._remember) {
+    store.set("account", {});
+  }
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
