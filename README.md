@@ -2,7 +2,7 @@
 
 > A Fanfou client built on Electron & Vue.js
 
-<div align="center"><img width="33%" height="33%" src="https://wx3.sinaimg.cn/large/65ad7d5aly1g8m5txjdv1j20p013gnh6.jpg"/></div>
+<div align="center"><img width="50%" src="https://wx3.sinaimg.cn/large/65ad7d5aly1g8m5txjdv1j20p013gnh6.jpg"/></div>
 
 ## Related
 
