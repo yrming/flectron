@@ -392,6 +392,69 @@ const destroyFavorite = async id => {
   return status;
 };
 
+/**
+ * Send direct messages
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const sendDirectMsg = async (opt = {}) => {
+  const client = getClient();
+  let msg = {};
+  try {
+    msg = await client.post("/direct_messages/new", {
+      ...opt
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+  console.log(msg);
+  return msg;
+};
+
+/**
+ * Create firendship
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const createFirendship = async (opt = {}) => {
+  const client = getClient();
+  let user = {};
+  try {
+    user = await client.post("/friendships/create", {
+      ...opt
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+  console.log(user);
+  return user;
+};
+
+/**
+ * Destory firendship
+ *
+ * @param {*} [opt={}]
+ * @returns
+ */
+const destoryFirendship = async (opt = {}) => {
+  const client = getClient();
+  let user = {};
+  try {
+    user = await client.post("/friendships/destroy", {
+      ...opt
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+  console.log(user);
+  return user;
+};
+
 export {
   setAccount,
   getAccount,
@@ -410,5 +473,8 @@ export {
   postStatus,
   deleteStatus,
   createFavorite,
-  destroyFavorite
+  destroyFavorite,
+  sendDirectMsg,
+  createFirendship,
+  destoryFirendship
 };

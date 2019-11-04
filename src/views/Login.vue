@@ -111,7 +111,6 @@ export default {
               this.sumbitLoading = false;
             } else {
               setAccount(userInfo);
-              console.log(getAccount());
               this.$router.replace({ path: "/home" });
             }
           })();

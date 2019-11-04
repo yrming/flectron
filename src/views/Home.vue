@@ -29,7 +29,7 @@ export default {
       this.timelineType = -1;
       setTimeout(() => {
         this.timelineType = 0;
-      }, 100);
+      }, 10);
     }
   },
   components: {

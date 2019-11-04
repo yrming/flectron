@@ -79,7 +79,6 @@ export default {
   },
   watch: {
     "$route.path": function(val) {
-      console.log(val);
       if (val !== "/profile" && val !== "/conversation") {
         this.selectedKeys = this.selectedKeysMap[val];
         this.openKeys = this.collapsed ? [] : this.openKeysMap[val];
@@ -110,7 +109,6 @@ export default {
       this.fileList = newFileList;
     },
     beforeUpload(file) {
-      console.log(file);
       this.fileList = [...this.fileList, file];
       return false;
     },

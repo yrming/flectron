@@ -87,7 +87,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$route.query.userName);
     this.loadUserInfo();
   },
   computed: {
@@ -109,7 +108,7 @@ export default {
         this.timelineType = -1;
         setTimeout(() => {
           this.timelineType = 5;
-        }, 100);
+        }, 10);
       }
     },
     callback(key) {

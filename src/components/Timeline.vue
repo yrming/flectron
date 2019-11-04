@@ -51,9 +51,6 @@
             />
             <a-icon @click="handleFoClick(item, index)" v-else type="api" />
           </span>
-          <span>
-            <a-icon @click="handleSendMsgClick(item, index)" type="message" />
-          </span>
         </template>
         <template v-else slot="actions">
           <span @click="handleReplyClick(item, index)">
@@ -227,7 +224,9 @@ import {
   deleteStatus,
   createFavorite,
   destroyFavorite,
-  postStatus
+  postStatus,
+  createFirendship,
+  destoryFirendship
 } from "@/utils/fanfouService";
 export default {
   props: {
@@ -259,7 +258,12 @@ export default {
       deleteStatusId: "",
       deleteModalTitle: "确认删除这条消息吗？",
       deleteModalText: "",
-      deleteModalVisible: false
+      deleteModalVisible: false,
+      // 发送私信
+      msgOtherUserId: "",
+      msgModalTitle: "",
+      msgModalText: "",
+      msgModalVisible: false
     };
   },
   watch: {
@@ -612,8 +616,7 @@ export default {
       }
       this.loadingMore = false;
     },
-    handleReplyClick(item, index) {
-      console.log(index);
+    handleReplyClick(item) {
       this.replyStatusId = item.id;
       this.replyModalTitle = `回复：${item.plain_text}`;
       this.replyModalText = `@${item.user.screen_name} `;
@@ -645,18 +648,15 @@ export default {
       }
       this.listData[index].favorited = !item.favorited;
     },
-    handleRetweetClick(item, index) {
-      console.log(index);
+    handleRetweetClick(item) {
       this.retweetStatusId = item.id;
       this.retweetModalText = `转@${item.user.screen_name} ${item.plain_text}`;
       this.retweetModalVisible = true;
       this.$nextTick(() => {
         this.$refs.textArea.focus();
       });
-      console.log(item);
     },
     handleDeleteClick(item, index) {
-      console.log(index);
       this.deleteModalText = item.plain_text;
       this.deleteStatusId = item.id;
       this.currentListItemIndex = index;
@@ -704,17 +704,27 @@ export default {
         }
       });
     },
-    handleUnFoClick(item, index) {
-      console.log(item);
-      console.log(index);
+    async handleUnFoClick(item, index) {
+      let data = await destoryFirendship({ id: item.id });
+      if (data === null) {
+        this.$message.error("取消关注失败");
+      } else {
+        this.$message.success("取消关注成功");
+        this.listData[index].following = !item.following;
+      }
     },
-    handleFoClick(item, index) {
-      console.log(item);
-      console.log(index);
-    },
-    handleSendMsgClick(item, index) {
-      console.log(item);
-      console.log(index);
+    async handleFoClick(item, index) {
+      let data = await createFirendship({ id: item.id });
+      if (data === null) {
+        if (item.protected) {
+          this.$message.success("已向TA发出关注请求，请等待确认");
+        } else {
+          this.$message.error("关注失败");
+        }
+      } else {
+        this.$message.success("关注成功");
+        this.listData[index].following = !item.following;
+      }
     }
   }
 };

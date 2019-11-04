@@ -13,7 +13,9 @@
           <div class="user-name">
             私信
           </div>
-          <div class="right-btn"></div>
+          <div class="right-btn">
+            <a-icon @click="sendMsgClick" type="plus" />
+          </div>
         </div>
       </div>
       <a-list
@@ -66,18 +68,42 @@
         </a-list-item>
       </a-list>
     </Scroll>
+    <div>
+      <a-modal
+        :title="modalTitle"
+        v-model="modalVisible"
+        :closable="false"
+        :destroyOnClose="true"
+        okText="发送"
+        :okButtonProps="{
+          props: { disabled: modalText ? false : true }
+        }"
+        cancelText="取消"
+        @ok="modalOkClick"
+      >
+        <a-textarea
+          :defaultValue="modalText"
+          v-model="modalText"
+          maxlength="140"
+          auto-focus
+        />
+      </a-modal>
+    </div>
   </div>
 </template>
 
 <script>
-import { getConversation } from "@/utils/fanfouService";
+import { getConversation, sendDirectMsg } from "@/utils/fanfouService";
 export default {
   data() {
     return {
       loading: true,
       listData: [],
       isSending: false,
-      otherUserId: this.$route.query.userId
+      otherUserId: this.$route.query.userId,
+      modalTitle: "",
+      modalText: "",
+      modalVisible: false
     };
   },
   mounted() {
@@ -117,15 +143,37 @@ export default {
     },
     goUserPage(userId) {
       alert(userId);
+    },
+    sendMsgClick() {
+      this.modalTitle = "发送私信";
+      this.modalVisible = true;
+    },
+    async modalOkClick() {
+      if (this.isSending) {
+        return;
+      }
+      this.isSending = true;
+      const msgData = await sendDirectMsg({
+        user: this.otherUserId,
+        text: this.modalText
+      });
+      if (msgData === null) {
+        this.$message.error("发送失败");
+      } else {
+        this.$message.success("发送成功");
+        this.listData.push(msgData);
+      }
+      this.isSending = false;
+      this.modalVisible = false;
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.basic-layout-content {
-  // margin: 39px 0px 16px 86px !important;
-}
+// .basic-layout-content {
+//   // margin: 39px 0px 16px 86px !important;
+// }
 .header-container {
   -webkit-app-region: drag;
   position: fixed;
