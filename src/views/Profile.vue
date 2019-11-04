@@ -9,7 +9,7 @@
             @click="goBackClick"
           />
         </div>
-        <div class="user-name">
+        <div class="user-name" @click="showEasterEggClick">
           <img :src="user.profile_image_url_large" alt="" />
           {{ user.screen_name }}
         </div>
@@ -83,7 +83,8 @@ export default {
         following: false,
         protected: false,
         profile_image_url_large: ""
-      }
+      },
+      clickCount: 0
     };
   },
   mounted() {
@@ -133,6 +134,17 @@ export default {
         },
         onCancel() {}
       });
+    },
+    showEasterEggClick() {
+      this.clickCount++;
+      if (this.clickCount >= 5) {
+        this.$message.open({
+          content: "我爱旦哥",
+          duration: "2",
+          icon: "❤️️"
+        });
+        this.clickCount = 0;
+      }
     }
   },
   watch: {

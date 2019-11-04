@@ -83,7 +83,6 @@ const getHomeTimeline = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(homeTimeline);
   return homeTimeline;
 };
 
@@ -103,10 +102,8 @@ const getUserTimeline = async (opt = {}) => {
       count: 30
     });
   } catch (error) {
-    console.log(JSON.stringify(error));
     return null;
   }
-  console.log(userTimeline);
   return userTimeline;
 };
 
@@ -128,7 +125,6 @@ const getMentions = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(mentions);
   return mentions;
 };
 
@@ -150,7 +146,6 @@ const getFavorites = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(favorites);
   return favorites;
 };
 
@@ -171,7 +166,6 @@ const destoryFavorite = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(status);
   return status;
 };
 
@@ -193,7 +187,6 @@ const getPhotos = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(photos);
   return photos;
 };
 
@@ -215,7 +208,6 @@ const getConversationList = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(conversations);
   return conversations;
 };
 
@@ -236,7 +228,6 @@ const getConversation = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(conversations);
   return conversations;
 };
 
@@ -257,7 +248,6 @@ const getUserInfo = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(user);
   return user;
 };
 
@@ -279,7 +269,6 @@ const getUserFriends = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(friends);
   return friends;
 };
 
@@ -301,7 +290,6 @@ const getUserFollowers = async (opt = {}) => {
   } catch (error) {
     return null;
   }
-  console.log(followers);
   return followers;
 };
 
@@ -312,7 +300,6 @@ const getUserFollowers = async (opt = {}) => {
  * @returns
  */
 const postStatus = async (opt = {}) => {
-  console.log(opt);
   const client = getClient();
   let status = {};
   try {
@@ -326,10 +313,8 @@ const postStatus = async (opt = {}) => {
       });
     }
   } catch (error) {
-    console.log(error);
     return null;
   }
-  console.log(status);
   return status;
 };
 
@@ -347,10 +332,8 @@ const deleteStatus = async (opt = {}) => {
       ...opt
     });
   } catch (error) {
-    console.log(error);
     return null;
   }
-  console.log(status);
   return status;
 };
 
@@ -366,10 +349,8 @@ const createFavorite = async id => {
   try {
     status = await client.post(`/favorites/create/${id}`);
   } catch (error) {
-    console.log(error);
     return null;
   }
-  console.log(status);
   return status;
 };
 
@@ -385,10 +366,8 @@ const destroyFavorite = async id => {
   try {
     status = await client.post(`/favorites/destroy/${id}`);
   } catch (error) {
-    console.log(error);
     return null;
   }
-  console.log(status);
   return status;
 };
 
@@ -406,10 +385,8 @@ const sendDirectMsg = async (opt = {}) => {
       ...opt
     });
   } catch (error) {
-    console.log(error);
     return null;
   }
-  console.log(msg);
   return msg;
 };
 
@@ -427,10 +404,8 @@ const createFirendship = async (opt = {}) => {
       ...opt
     });
   } catch (error) {
-    console.log(error);
     return null;
   }
-  console.log(user);
   return user;
 };
 
@@ -448,10 +423,8 @@ const destoryFirendship = async (opt = {}) => {
       ...opt
     });
   } catch (error) {
-    console.log(error);
     return null;
   }
-  console.log(user);
   return user;
 };
 

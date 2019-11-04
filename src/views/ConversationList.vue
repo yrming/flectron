@@ -114,40 +114,6 @@ export default {
       }
       this.loadingMore = false;
     },
-    handleReplyClick(item) {
-      this.replyModalTitle = `回复：${item.plain_text}`;
-      this.replyModalText = `@${item.user.screen_name} `;
-      this.replyModalVisible = true;
-    },
-    replyModalOkClick() {
-      alert(123);
-    },
-    handleStarClick(item) {
-      console.log(item);
-    },
-    handleRetweetClick(item) {
-      this.retweetModalText = `转@${item.user.screen_name} ${item.plain_text}`;
-      this.retweetModalVisible = true;
-      this.$nextTick(() => {
-        console.log(this.$refs.textArea);
-        this.$refs.textArea.focus();
-        console.log(this.$refs.textArea.setSelectionRange);
-        console.log(this.$refs.textArea.createTextRange);
-      });
-      console.log(item);
-    },
-    handleDeleteClick(item) {
-      this.deleteModalTitle = `你确定要删除这条消息吗？`;
-      this.deleteModalText = item.plain_text;
-      this.deleteModalVisible = true;
-      console.log(item);
-    },
-    retweetModalOkClick() {
-      alert(123);
-    },
-    deleteModalOkClick() {
-      alert(123);
-    },
     refreshClick() {
       this.loading = true;
       this.showLoadingMore = true;
