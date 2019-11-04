@@ -38,8 +38,8 @@ function createWindow() {
     // backgroundColor: "#212121",
     webPreferences: {
       experimentalFeatures: true,
-      nodeIntegration: true
-      // devTools: false
+      nodeIntegration: true,
+      devTools: isDevelopment
     }
   });
 
