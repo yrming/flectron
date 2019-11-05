@@ -8,7 +8,7 @@
 
 - [fanfou-sdk-node](https://github.com/LitoMore/fanfou-sdk-node) - Fanfou SDK for Node.js
 
-- [ant-design-vue](https://github.com/vueComponent/ant-design-vue) - An enterprise-class UI components based on Ant Design and Vue. 🐜 
+- [ant-design-vue](https://github.com/vueComponent/ant-design-vue) - An enterprise-class UI components based on Ant Design and Vue
 
 ## License
 
