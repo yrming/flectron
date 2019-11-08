@@ -54,7 +54,7 @@
             >
               自动登录
             </a-checkbox>
-            <a class="login-form-forgot" href="">
+            <a class="login-form-forgot" @click="forgetPwdClick">
               忘记密码
             </a>
             <a-button
@@ -68,7 +68,7 @@
           </a-form-item>
         </a-form>
       </a-layout-content>
-      <a-layout-footer style="text-align: center">
+      <a-layout-footer style="text-align: center;">
         ❤️⭕️⭕️
       </a-layout-footer>
     </a-layout>
@@ -79,7 +79,7 @@
 </template>
 <script>
 import { xauth, setAccount, getAccount } from "@/utils/fanfouService";
-
+import { shell } from "electron";
 export default {
   data() {
     return {
@@ -117,12 +117,16 @@ export default {
           })();
         }
       });
+    },
+    forgetPwdClick() {
+      shell.openExternal("http://fanfou.com/reset");
     }
   }
 };
 </script>
 <style lang="less" scoped>
 .login-layout {
+  -webkit-app-region: drag;
   background-image: url(https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg);
   background-repeat: no-repeat;
   background-position: center 110px;

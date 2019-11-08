@@ -121,7 +121,13 @@ export default {
       this.loadData();
     },
     goUserPage(userId) {
-      alert(userId);
+      this.$router.push({
+        path: "/profile",
+        query: {
+          from: this.$route.fullPath,
+          userId: userId
+        }
+      });
     },
     goPrivateMsgPage(userId) {
       this.$router.push({

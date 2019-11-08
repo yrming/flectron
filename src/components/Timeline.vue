@@ -228,6 +228,7 @@ import {
   createFirendship,
   destoryFirendship
 } from "@/utils/fanfouService";
+import { shell } from "electron";
 export default {
   props: {
     timelineType: {
@@ -692,7 +693,7 @@ export default {
           }
         });
       } else if (textItem.type === "link") {
-        window.open(textItem.text);
+        shell.openExternal(textItem.text);
       }
     },
     goUserPage(userId) {
