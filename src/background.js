@@ -2,12 +2,12 @@
 
 import { app, protocol, BrowserWindow } from "electron";
 import Store from "electron-store";
+import checkVersion from "./utils/updateChecker";
 import {
   createProtocol,
   // eslint-disable-next-line no-unused-vars
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
-import { autoUpdater } from "electron-updater";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -37,7 +37,6 @@ function createWindow() {
     frame: false,
     vibrancy: "ultra-dark",
     titleBarStyle: "hidden",
-    // backgroundColor: "#212121",
     webPreferences: {
       experimentalFeatures: true,
       nodeIntegration: true,
@@ -53,7 +52,7 @@ function createWindow() {
     createProtocol("app");
     // Load the index.html when not in development
     win.loadURL("app://./index.html");
-    autoUpdater.checkForUpdatesAndNotify();
+    checkVersion();
   }
 
   // win.on("closed", () => {
